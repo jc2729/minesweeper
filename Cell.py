@@ -1,6 +1,3 @@
-#mines around it
-#hence its display
-#receives information only about mines around it
 
 class Cell:
 	mine=False
@@ -33,9 +30,10 @@ class Cell:
 		else:
 			return "?"
 
-	def playerFlag(self):
-		self.flagged=True
+	def playerFlag(self, flag=True):
+		self.flagged=flag
 	
 	def playerReveal(self):
 		self.flagged=False
 		self.revealed=True
+		return 1

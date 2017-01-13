@@ -1,8 +1,5 @@
 #improvement: timer, threaded leadership board
-#placemines()
-#getmines()
-#display/print number of mines
-#revealcells() randomly
+
 import random, math
 from Cell import Cell
 
@@ -46,7 +43,6 @@ class Board(object):
 		number=0
 		delRow=[-1,0,1]
 		delCol=[-1,0,1]
-		#print (r, c)
 		for row in delRow:
 			for col in delCol:
 				if (row+r)>=0 and (row+r)<self.rows and (col+c)>=0 and (col+c)<self.cols and self.listOfRows[row+r][col+c].isMine():
@@ -55,6 +51,9 @@ class Board(object):
 
 	def flag(self,r,c):
 		self.listOfRows[r][c].playerFlag()
+
+	def unflag(self,r,c):
+		self.listOfRows[r][c].playerFlag(False)
 
 	def getContent(self):
 		playerView=[]
@@ -67,9 +66,19 @@ class Board(object):
 	def reveal(self, r, c):
 		if self.listOfRows[r][c].isMine():
 			return False
-		else:
+		elif self.listOfRows[r][c].number>0:
 			self.listOfRows[r][c].playerReveal()
 			self.numRevealed+=1
+			print self.numRevealed
+			return True
+		else:
+
+			self.listOfRows[r][c].playerReveal()
+			print self.numRevealed
+			numExposed=self.ripple(r,c)
+			print numExposed
+			assert numExposed!=-1
+			self.numRevealed+=numExposed
 			return True
 
 	def won(self):
@@ -79,3 +88,14 @@ class Board(object):
 	def revealAll(self):
 		return self.listOfRows
 
+#THIS IS WRONG KMS
+	def ripple(self,r,c):
+		delRow=[-1,0,1]
+		delCol=[-1,0,1]
+		for row in delRow:
+			for col in delCol:
+				if (row+r)>=0 and (row+r)<self.rows and (col+c)>=0 and (col+c)<self.cols and not self.listOfRows[row+r][col+c].isMine():
+					if self.listOfRows[row+r][col+c].number==0:
+						return 1+self.ripple(row+r,col+c)
+					return self.listOfRows[r][c].playerReveal()
+		return -1
