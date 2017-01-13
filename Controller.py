@@ -35,6 +35,12 @@ class Controller:
                     #TODO choose
                     print "Chosen"
                 #TODO win boolean
+                rows=5
+                cols=5
+                for r in range(rows):
+                    for c in range(cols):
+                        print board.listOfRows[r][c].getContent(),
+                    print ""
 
     if __name__=="__main__":
         main()
