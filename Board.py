@@ -11,14 +11,13 @@ class Board(object):
 	cols=0
 	listOfRows=[]
 	numMines=0
-	kek=False
+	numRevealed=0
 	def __init__(self, rows, cols):
 
 		#initialize all Cells to 0
 		self.listOfRows=[[Cell(False) for r in range(rows)] for i in range(cols)] 
 		self.rows=rows
 		self.cols=cols
-		self.kek=True
 		self.numMines=math.ceil(self.rows*self.cols*0.2)
 		self.placeMines(self.numMines)
 		
@@ -27,7 +26,6 @@ class Board(object):
 				minesNearby=self.neighboringMines(r,c)
 				#correct output
 				self.listOfRows[r][c].updateContent(minesNearby)
-				print self.listOfRows[r][c].getContent(),
 
 	def placeMines(self,numMines):
 		#maximum number of mines
@@ -39,10 +37,9 @@ class Board(object):
 		col=random.randint(0,self.cols-1)
 		#Places an individual mine
 		while self.listOfRows[row][col].isMine()==True:
-			row=random.randint(0,self.rows-1) #rows are vertical
+			row=random.randint(0,self.rows-1) #row-major
 			col=random.randint(0,self.cols-1)
 		self.listOfRows[row][col]=Cell(True)
-		#print "asamine at" + str((row, col))
 		return True
 
 	def neighboringMines(self,r,c):
@@ -53,7 +50,32 @@ class Board(object):
 		for row in delRow:
 			for col in delCol:
 				if (row+r)>=0 and (row+r)<self.rows and (col+c)>=0 and (col+c)<self.cols and self.listOfRows[row+r][col+c].isMine():
-					#print "mine at" + str((row+r, col+c))
 					number+=1
-		#print number
 		return number
+
+	def flag(self,r,c):
+		self.listOfRows[r][c].playerFlag()
+
+	def getContent(self):
+		playerView=[]
+		playerView=[["" for r in range(self.rows)] for i in range(self.cols)] 
+		for r in range(self.rows):
+			for c in range(self.cols):
+				playerView[r][c]=self.listOfRows[r][c].playerGetContent()
+		return playerView
+
+	def reveal(self, r, c):
+		if self.listOfRows[r][c].isMine():
+			return False
+		else:
+			self.listOfRows[r][c].playerReveal()
+			self.numRevealed+=1
+			return True
+
+	def won(self):
+		if (self.numRevealed==self.rows*self.cols-self.numMines):
+			return True
+
+	def revealAll(self):
+		return self.listOfRows
+

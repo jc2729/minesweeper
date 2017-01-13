@@ -24,3 +24,18 @@ class Cell:
 	
 	def updateContent(self,neighboringMines):
 		self.number=neighboringMines
+
+	def playerGetContent(self):
+		if self.flagged==True:
+			return "F"
+		elif self.revealed==True:
+			return self.getContent()
+		else:
+			return "?"
+
+	def playerFlag(self):
+		self.flagged=True
+	
+	def playerReveal(self):
+		self.flagged=False
+		self.revealed=True
