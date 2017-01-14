@@ -19,30 +19,38 @@ class Controller:
                 print board.getContent()[r][c],
             print ""
         
-        while (not board.won()):      
-            response=raw_input("Type \n 'f [row] [col]' to flag \n 'u [row] [col]' to unflag \n 'c [row] [col] to choose' \n 'q' to exit \n")
-            if response[0]=='f': #flag
-                r=response[2]
-                c=response[4]
-                board.flag(int(r),int(c))
-            elif response[0]=='u': #unflag
-                r=response[2]
-                c=response[4]
-                board.unflag(int(r),int(c))
-            elif response[0]=='q':
-                print "Goodbye!"
-                sys.exit()
-            elif response[0]=='c':  #choose
-                r=response[2]
-                c=response[4]
-                if (not board.reveal(int(r),int(c))):
-                    break
-
+        while (not board.won()):
+            try:
+                response=raw_input("Type \n 'f [row] [col]' to flag \n 'u [row] [col]' to unflag \n 'c [row] [col] to choose' \n 'q' to exit \n")
+                
+                if response[0]=='q':
+                    print "Goodbye!"
+                    sys.exit()
+                else:
+                    r=response[2]
+                    c=response[4]
+                    if int(r)<0 or int(r)>=rows or int(c)<0 or int(c)>=cols:
+                        raise Exception
+                    elif response[0]=='f': #flag
+                        
+                        board.flag(int(r),int(c))
+                    elif response[0]=='u': #unflag
+                       
+                        board.unflag(int(r),int(c))
+                    elif response[0]=='c': #choose
+                        
+                        if (not board.reveal(int(r),int(c))):
+                            break
+                    else:
+                        raise Exception
+                for r in range(rows):  
+                    for c in range(cols):
+                        print board.getContent()[r][c],
+                    print ""
+            except Exception:
+                print "Please follow the output format"
             #Print the board      
-            for r in range(rows):  
-                for c in range(cols):
-                    print board.getContent()[r][c],
-                print ""
+            
 
         if (not board.won()):
             for r in range(rows):
