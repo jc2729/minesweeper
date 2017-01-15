@@ -12,7 +12,7 @@ class Controller:
         rows=5
         cols=5
         board=Board(rows,cols) 
-        print "There are "+ str(int(board.numMines)) +" mines on this board."
+        print "Welcome. There are "+ str(int(board.numMines)) +" mines on this board. Your task is to uncover all the cells, hidden by the ?, that do not contains mines. Good luck!"
         #Print board for the first time
         for r in range(rows):           
             for c in range(cols):
@@ -21,11 +21,13 @@ class Controller:
         
         while (not board.won()):
             try:
-                response=raw_input("Type \n 'f [row] [col]' to flag \n 'u [row] [col]' to unflag \n 'c [row] [col] to choose' \n 'q' to exit \n")
+                response=raw_input("Type \n 'f [row] [col]' to flag \n 'u [row] [col]' to unflag \n 'c [row] [col]' to choose \n 'h' for a hint \n 'q' to exit \n")
                 
                 if response[0]=='q':
                     print "Goodbye!"
                     sys.exit()
+                elif response[0]=='h':
+                    board.showHint()
                 else:
                     r=response[2]
                     c=response[4]

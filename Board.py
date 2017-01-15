@@ -99,5 +99,19 @@ class Board(object):
 		#a number other than 0 and not revealed
 		else:
 			return self.listOfRows[r][c].playerReveal()
+
+	def showHint(self):
+
+
+		row=random.randint(0,self.rows-1)
+		col=random.randint(0,self.cols-1)
+
+		while self.listOfRows[row][col].revealed or self.listOfRows[row][col].isMine():
+			row=random.randint(0,self.rows-1)
+			col=random.randint(0,self.cols-1)
+
+		self.reveal(row,col)
+
+
 		
 
